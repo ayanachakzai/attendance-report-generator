@@ -1,0 +1,70 @@
+# HOW TO RUN THIS SCRIPT IN VS CODE
+
+## STEP 1: Install Python
+1. Download Python from: https://www.python.org/downloads/
+2. During installation, CHECK the box "Add Python to PATH"
+3. Click Install
+
+## STEP 2: Install Required Libraries
+Open Terminal in VS Code (Terminal → New Terminal) and run these commands:
+
+```
+pip install pandas
+pip install python-docx
+pip install openpyxl
+```
+
+WHAT DO THESE DO?
+- pip = Python package installer (comes with Python)
+- pandas = Library for Excel files
+- python-docx = Library for Word documents
+- openpyxl = Library pandas needs to read .xlsx files
+
+## STEP 3: Organize Your Files
+Put these files in the SAME FOLDER:
+```
+your_project_folder/
+├── attendance_report_generator.py  (the script)
+├── Students_Attendance_list_Oct-25_intake_updated_till_25_Jan_26.xlsx  (attendance data)
+└── ATTENDANCE_REPORT-SST.docx  (template)
+```
+
+## STEP 4: Run the Script
+1. Open the folder in VS Code (File → Open Folder)
+2. Open `attendance_report_generator.py`
+3. Click the "Run" button (▶️) in the top right
+   OR press F5
+   OR open Terminal and type: `python attendance_report_generator.py`
+
+## STEP 5: Check Results
+A new folder called `attendance_reports` will appear with all 145+ reports!
+
+## TROUBLESHOOTING
+
+### Error: "No module named pandas"
+- Solution: Run `pip install pandas` in terminal
+
+### Error: "No such file or directory"
+- Solution: Make sure all 3 files are in the same folder
+- Solution: Check file names match exactly (including spaces)
+
+### Error: "Permission denied"
+- Solution: Close any open Word documents
+- Solution: Run VS Code as administrator
+
+## CUSTOMIZING THE SCRIPT
+
+### Change attendance ranges:
+Find this section in the code (around line 130):
+```python
+if attendance_percent >= 80:
+    attendance_category = "Excellent attendance"
+```
+Change the numbers (80, 70, 60) to your preferred ranges.
+
+### Change output folder name:
+Find this line (around line 55):
+```python
+OUTPUT_DIR = 'attendance_reports'
+```
+Change 'attendance_reports' to whatever you want.
