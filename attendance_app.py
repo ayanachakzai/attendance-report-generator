@@ -263,38 +263,30 @@ with st.sidebar:
     st.markdown("""
     ### How to Use:
     
-    1. **Upload Files**
-       - Student attendance Excel file
-       - Report template (DOCX)
+    1. **Rename the files*
+        - Rename your Excel file to `student_attendance.xlsx`
+        - Rename your template file to `template.docx`
     
-    2. **Choose Options**
+    2. **Upload Files**
+       - Student attendance Excel file (student_attendance.xlsx)
+       - Report template (DOCX) (template.docx)
+    
+    3. **Choose Options**
        - PDF or DOCX output
        - Organize by groups or not
     
-    3. **Generate**
+    4. **Generate**
        - Click "Generate Reports"
        - Wait for processing
        - Download ZIP file
     
-    ### Enable PDF Support:
-    
-    To enable PDF conversion on Streamlit Cloud:
-    
-    1. Create file: `packages.txt`
-    2. Add these lines:
-       ```
-       libreoffice
-       libreoffice-writer
-       ```
-    3. Commit and push to GitHub
-    4. Streamlit Cloud will install LibreOffice
-    5. PDF option will appear!
     
     ### Requirements:
     
+    - **Rename the sheet file to "student_attendance.xlsx" and the template file to "template.docx" for the program to work.
     - **Excel format:** Columns for Name, Surname, BNU ID, Campus, LIVE, Group Ref
     
     ### Support:
     
-    Contact Ayan for help!
+    Contact Ayan (ayan.achakzai@magnacartacollege.ac.uk) for help!
     """)
