@@ -399,7 +399,8 @@ def fill_student_details(doc, student_name, bnu_id, campus):
         student_name,
     )
     filled_bnu = fill_labeled_cell(doc, is_bnu_header, bnu_id)
-    filled_campus = fill_labeled_cell(doc, is_campus_header, campus)
+    campus = clean_text(campus)
+    filled_campus = fill_labeled_cell(doc, is_campus_header, campus) if campus else True
 
     if doc.tables:
         table = doc.tables[0]
@@ -408,7 +409,7 @@ def fill_student_details(doc, student_name, bnu_id, campus):
                 table.rows[4].cells[1].text = student_name
             if not filled_bnu:
                 table.rows[5].cells[1].text = bnu_id
-            if not filled_campus:
+            if campus and not filled_campus:
                 table.rows[6].cells[1].text = campus
 
 
