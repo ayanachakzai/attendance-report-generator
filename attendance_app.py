@@ -98,10 +98,39 @@ def is_attendance_header(value):
     label = normalize_label(value)
     compact = compact_label(value)
     return (
-        compact in {"live", "attendance", "attendance%", "attendancepercent", "attendancepercentage"}
+        compact
+        in {
+            "live",
+            "att",
+            "att%",
+            "attpercent",
+            "attendance",
+            "attendance%",
+            "attendancepercent",
+            "attendancepercentage",
+            "attendancerate",
+            "overall",
+            "overall%",
+            "overallattendance",
+            "overallatt",
+            "overallatt%",
+            "actual",
+            "actual%",
+            "actualattendance",
+            "present",
+            "present%",
+            "presentpercent",
+            "presentpercentage",
+            "percentage",
+            "rate",
+            "totalattendance",
+        }
         or "attendance" in label
         or "attend" in label
         or "percent" in label
+        or "percentage" in label
+        or "present" in label
+        or "overall" in label
         or "%" in label
     )
 
@@ -209,9 +238,28 @@ def choose_column(df, matcher, data_score=None):
 
 
 def attendance_data_score(series):
-    values = [parse_attendance_percent(value) for value in series.dropna().head(25)]
+    values = [parse_attendance_percent(value) for value in series.dropna().head(50)]
     valid_values = [value for value in values if value is not None and 0 <= value <= 100]
-    return min(len(valid_values), 3)
+    return min(len(valid_values), 5)
+
+
+def choose_attendance_column(df):
+    best_column = None
+    best_score = 0
+
+    for column in df.columns:
+        if any(matcher(column) for matcher in [is_bnu_header, is_name_header, is_surname_header, is_campus_header, is_group_header]):
+            continue
+
+        header_score = 5 if is_attendance_header(column) else 0
+        data_score = attendance_data_score(df[column])
+        score = header_score + data_score
+
+        if score > best_score:
+            best_column = column
+            best_score = score
+
+    return best_column if best_score >= 5 else None
 
 
 def header_row_score(row):
@@ -259,7 +307,7 @@ def read_attendance_data(excel_file):
     df = df.dropna(how="all")
 
     bnu_column = choose_column(df, is_bnu_header)
-    attendance_column = choose_column(df, is_attendance_header, attendance_data_score)
+    attendance_column = choose_attendance_column(df)
     name_column = choose_column(df, is_name_header)
     surname_column = choose_column(df, is_surname_header)
     full_name_column = choose_column(df, is_full_name_header)
@@ -269,7 +317,12 @@ def read_attendance_data(excel_file):
     if bnu_column is None:
         raise ValueError("Could not find a BNU ID column. Column names are matched case-insensitively.")
     if attendance_column is None:
-        raise ValueError("Could not find an attendance column, such as LIVE, Attendance, or Attendance %.")
+        column_list = ", ".join(clean_text(column) for column in df.columns)
+        raise ValueError(
+            "Could not find an attendance column. "
+            f"I detected sheet '{sheet_name}', header row {header_row + 1}, and these columns: {column_list}. "
+            "Please make sure the attendance percentage column has values like 0.82, 82, or 82%."
+        )
     if name_column is None and full_name_column is None:
         raise ValueError("Could not find a student name column.")
 
